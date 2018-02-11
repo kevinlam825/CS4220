@@ -57,11 +57,17 @@ function alternatingCase(str) {
 
 function inverseCase(str) {
     let result = ''
+    let cap = upperCase(str)
     for (i = 0; i < str.length; i++) {
-
+        if (cap[i - 1] == ' ' || i == 0) {
+            if (cap.charCodeAt(i) >= 65 && cap.charCodeAt(i) <= 90) {
+                let temp = cap.charCodeAt(i) + 32
+                result += String.fromCharCode(temp)
+            } else result += cap[i]
+        } else result += cap[i]
     }
+    return result
 }
-
 
 function runStringFunctions() {
     let str = 'I watched the storm, so beautiful yet terrific. The face of the moon was in shadow.'
@@ -75,7 +81,7 @@ function runStringFunctions() {
     console.log('capitalizedCase: ', capitalizedCase(str))
     console.log('alternatingCase: ', alternatingCase(str))
         //console.log('titleCase: ', titleCase(str, lowercaseWords))
-        //console.log('inverseCase: ', inverseCase(str))
+    console.log('inverseCase: ', inverseCase(str))
 }
 
 runStringFunctions()
