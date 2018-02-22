@@ -12,13 +12,13 @@ class Groups {
     }
 
     removeGroup(groupName) {
-        const groupIndex = this.groups.findIndex(group => group.name == groupName)
-        this.groups.splice(groupIndex, 1)
+        const groupIndex = this.groups.findIndex(group => group.name == groupName) //Find index of inputted group name
+        this.groups.splice(groupIndex, 1) //Remove from list
     }
 
     addMember(groupName, memberName) {
-        const groupIndex = this.groups.findIndex(group => group.name == groupName)
-        this.groups[groupIndex].members.push(memberName);
+        const groupIndex = this.groups.findIndex(group => group.name == groupName) //Find index of inputted group name
+        this.groups[groupIndex].members.push(memberName); //Add member to index of found group
     }
 
     removeMember(groupName, memberName) {
@@ -34,15 +34,16 @@ class Groups {
             this.groups[groupIndex].members.splice(memberIndex, 1)
 
     }
+
     get print() {
         this.groups.forEach(group => {
-            let membersLine = ''
-            membersLine += group.name
-            membersLine += '\nLeader: ' + group.leader + '\n'
+            let result = ''
+            result += group.name + '\n' //Insert group name
+            result += 'Leader: ' + group.leader + '\n' //Insert group leader
             group.members.forEach(member => {
-                membersLine += member + ' | ';
+                result += member + ' | '; //Add each member
             });
-            console.log(membersLine.substring(0, membersLine.length - 3))
+            console.log(result.substring(0, result.length - 3)) //Get rid of extra chars
             console.log()
         });
     }
@@ -93,10 +94,10 @@ displayName(person) // Elon Musk
 combineName = (person, keyArray, destinationKey) => {
     let newKey = ''
     keyArray.forEach((key) => {
-        newKey += person[key] + ' '
-        delete person[key]
+        newKey += person[key] + ' ' //Get value of key
+        delete person[key] //Remove key from original person
     })
-    person[destinationKey] = newKey.substring(0, newKey.length - 1)
+    person[destinationKey] = newKey.substring(0, newKey.length - 1) //Set new key with new values
 
     return person
 }
@@ -112,9 +113,9 @@ function createObject(peopleArray) {
     peopleArray.forEach((person) => {
         newObjects[index] = {}
         person.forEach((element) => {
-            newObjects[index][element.key] = element.value
+            newObjects[index][element.key] = element.value //Add key and value from each item in peopleArray at the respective index
         })
-        index++
+        index++ //Increment to next object when done
     })
     console.log(newObjects)
 }
