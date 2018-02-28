@@ -1,15 +1,10 @@
 //Lab 2 - Kevin Lam
 
-
 const crypto = require('crypto')
 const message = 'Hello, World!'
 
 //Problem 1
-// Get a list of all supported hashing algorithms
-const hashes = crypto.getHashes()
-
 const hashingAlgorithm = 'sha256'
-
 let result = ''
 let digestResult = ''
 let nonce = 1
@@ -32,7 +27,6 @@ const fs = require('fs')
 const path = require('path')
 const fullPrivateKeyPath = path.resolve('keys', 'private_key.pem')
 const privateKey = fs.readFileSync(fullPrivateKeyPath, 'utf8')
-const sign = crypto.createSign('SHA256')
 const fullPublicKeyPath = path.resolve('keys', 'public_key.pem')
 const publicKey = fs.readFileSync(fullPublicKeyPath, 'utf8')
 
@@ -45,14 +39,8 @@ request('http://albertcervantes.com/cs4220/messages.json', (error, response, bod
 })
 
 let validateKeys = (element) => {
-    const sign = crypto.createSign('SHA256')
-    sign.update(element.message)
-    const signature = sign.sign(privateKey, 'hex')
-
     verify = crypto.createVerify('SHA256')
     verify.update(element.message)
-
     const isValidSignature = verify.verify(publicKey, element.signature, 'hex')
-
     console.log(`${isValidSignature} - ${element.message}`)
 }
