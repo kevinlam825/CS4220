@@ -25,8 +25,6 @@ console.log()
 let request = require('request');
 const fs = require('fs')
 const path = require('path')
-const fullPrivateKeyPath = path.resolve('keys', 'private_key.pem')
-const privateKey = fs.readFileSync(fullPrivateKeyPath, 'utf8')
 const fullPublicKeyPath = path.resolve('keys', 'public_key.pem')
 const publicKey = fs.readFileSync(fullPublicKeyPath, 'utf8')
 
