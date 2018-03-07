@@ -1,3 +1,5 @@
+//Lab 3 - Kevin Lam
+
 const
     cards = require('deckofcards'),
     inquirer = require('inquirer')
