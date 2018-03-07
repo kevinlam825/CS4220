@@ -17,45 +17,41 @@ const draw = (shuffle, n = 1) => {
         .catch(err => console.log(err))
 }
 
-// HINT for #3 in Lab
 const discardPrompt = (result) => {
     return inquirer.prompt([{
         type: 'checkbox',
         message: 'select cards to throw away',
         name: 'cards',
-        choices: [result.cards[0].value + ' OF ' + result.cards[0].suit, result.cards[1].value + ' OF ' + result.cards[1].suit, result.cards[2].value + ' OF ' + result.cards[2].suit, result.cards[3].value + ' OF ' + result.cards[3].suit, result.cards[4].value + ' OF ' + result.cards[4].suit], // implement choices array - look at the inquirer documentation,
+        choices: [result.cards[0].value + ' OF ' + result.cards[0].suit, result.cards[1].value + ' OF ' + result.cards[1].suit, result.cards[2].value + ' OF ' + result.cards[2].suit, result.cards[3].value + ' OF ' + result.cards[3].suit, result.cards[4].value + ' OF ' + result.cards[4].suit],
         validate: (answer) => {
-            if (answer.length < 5) {
+            if (answer.length < 5) { //Only allow up to 4 cards to be selected
                 return true
             } else return 'Only select up to 4 cards'
         }
     }])
 }
 
-// HINT for #4 in Lab
 const findAndRemove = (current, throwaway) => {
-    let arr = Array.from(throwaway)
+    let arr = Array.from(throwaway) // Make object into array for comparisons
+
     current.forEach(card => {
         let cardString = ''
-        cardString += card.value + ' OF ' + card.suit
-        if (arr.includes(cardString)) {
+        cardString += card.value + ' OF ' + card.suit //Match format of choices
+        if (arr.includes(cardString)) { //If card was selected, remove from hand
             let cardIndex = current.indexOf(card)
             delete current[cardIndex]
         }
     })
+
 }
 
-// HINT for #6 in Lab
-const print = cards => {
-    console.log(cards)
+const print = (cardList, remainingCards) => {
     console.log('-- CARDS --')
-    cards.forEach(card => {
+    cardList.cards.forEach(card => {
         console.log(`${card.value} of ${card.suit}`)
     })
-
-    console.log('-- REMAING CARDS --')
-    console.log(cards.remaining)
-
+    console.log('-- REMAINING CARDS --')
+    console.log(remainingCards)
 }
 
 const play = () => {
@@ -65,15 +61,15 @@ const play = () => {
             discardPrompt(result)
                 .then(selected => {
                     findAndRemove(result.cards, selected.cards)
-                        //result.draw(result.deck_id, selected.cards.length)
-                        //return result.cards
-                    console.log(result.cards)
-                    console.log(result)
+                    cards.draw(result.deck_id, selected.cards.length).then(newCards => {
+                        newCards.cards.forEach(card => {
+                            result.cards.push(card)
+                        })
+                        print(result, newCards.remaining)
+                    });
                 })
 
         })
-        //.then(ag => cards.draw(ag.deck_id, 5))
-        //.then(gotIt => print(cards))
         .catch(err => console.log(err))
 }
 
