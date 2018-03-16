@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Chuck Jokes</title>
+    <title>Chuck Facts</title>
     <style>
         [v-cloak] {
             display: none;
@@ -23,20 +23,28 @@
             <option v-for="category in categories">{{category}}</option>
           </select> category
 
-            <button v-on:click="getJoke"> Get Fact </button>
+            <button v-on:click="getFact"> Get Fact </button>
         </p>
 
         <p>- or -</p>
         <input v-model="searchQuery" placeholder="Search for a fact">
-        <button v-on:click="searchJoke"> Search </button>
+        <button v-on:click="searchFact"> Search </button>
 
-        <p v-show="isFetchingAJoke">Fetching...</p>
-        <h3 v-show="!isFetchingAJoke">{{currentJoke}}</h3>
+        <h3 v-if="queryHistory.length">Previous searches: {{queryHistory.toString()}}</h3>
 
-        <p v-if="previousJokes.length">Previous Jokes</p>
-        <ol>
-            <li v-for="joke in previousJokes">{{joke}}</li>
-        </ol>
+        <p v-show="isFetchingAFact">Fetching...</p>
+
+        <div v-show="showSelect">
+            <h3 v-show="!isFetchingAFact">{{currentFact}}</h3>
+        </div>
+
+        <div v-show="showSearch">
+            <p v-if="searchResults.length">Search Results</p>
+            <ol>
+                <li v-for="fact in searchResults">{{fact}}</li>
+            </ol>
+        </div>
+
     </div>
 
     <script type="text/javascript" src="https://unpkg.com/vue"></script>

@@ -4,15 +4,18 @@ let chuck = new Vue({
 
     // The data that will bind to our template
     data: {
-        appName: 'Chuck Jokes',
-        currentJoke: '',
-        previousJokes: [],
+        appName: 'Chuck Facts',
+        currentFact: '',
+        searchResults: [],
+        queryHistory: [],
         categories: [],
         selected: 'any',
         factUrl: '',
         searchQuery: '',
         searchUrl: '',
-        isFetchingAJoke: false
+        isFetchingAFact: false,
+        showSearch: false,
+        showSelect: false
     },
     created: function() {
         let self = this
@@ -33,12 +36,16 @@ let chuck = new Vue({
     methods: {
         // Fetch a joke from icanhazdadjoke.com
 
-        searchJoke: function() {
-            this.isFetchingAJoke = true
+        searchFact: function() {
+            this.isFetchingAFact = true
+            this.showSearch = true
+            this.showSelect = false
             let viewModel = this
 
+
+
             viewModel.searchUrl = 'https://api.chucknorris.io/jokes/search?query=' + viewModel.searchQuery
-            console.log(viewModel.searchUrl)
+
 
             axios.get(viewModel.searchUrl, {
                     headers: {
@@ -46,16 +53,13 @@ let chuck = new Vue({
                     }
                 })
                 .then(function(response) {
+                    viewModel.isFetchingAFact = false
+                    viewModel.queryHistory.push(viewModel.searchQuery)
+                    viewModel.searchResults = []
 
-                    viewModel.isFetchingAJoke = false
-                    console.log(response)
-
-                    // Add the current joke to the previous jokes array
-                    if (viewModel.currentJoke)
-                        viewModel.previousJokes.push(viewModel.currentJoke)
-
-                    // Assign the new joke to the 'currentJoke' property
-                    viewModel.currentJoke = response.data.value
+                    response.data.result.forEach((fact) => {
+                        viewModel.searchResults.push(fact.value)
+                    })
                 })
                 .catch(function(err) {
                     alert(err)
@@ -64,9 +68,11 @@ let chuck = new Vue({
 
         },
 
-        getJoke: function() {
+        getFact: function() {
+            this.isFetchingAFact = true
+            this.showSearch = false
+            this.showSelect = true
 
-            this.isFetchingAJoke = true
             let viewModel = this
 
             if (viewModel.selected == 'any') viewModel.factUrl = 'https://api.chucknorris.io/jokes/random' // Assign url based on selected category
@@ -78,16 +84,11 @@ let chuck = new Vue({
                     }
                 })
                 .then(function(response) {
+                    viewModel.isFetchingAFact = false
+                    viewModel.showSelect = true
+                    viewModel.showSearch = false
 
-                    viewModel.isFetchingAJoke = false
-                    console.log(response)
-
-                    // Add the current joke to the previous jokes array
-                    if (viewModel.currentJoke)
-                        viewModel.previousJokes.push(viewModel.currentJoke)
-
-                    // Assign the new joke to the 'currentJoke' property
-                    viewModel.currentJoke = response.data.value
+                    viewModel.currentFact = response.data.value
                 })
                 .catch(function(err) {
                     alert(err)
