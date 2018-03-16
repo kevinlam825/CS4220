@@ -17,14 +17,18 @@
     <div id="chuck" v-cloak>
 
         <h1>{{appName}}</h1>
-
-        <select v-model="selected">
+        <p>Get a random fact from the
+            <select v-model="selected">
             <option value="any">Any</option>
             <option v-for="category in categories">{{category}}</option>
-          </select>
-        <span>Selected: {{ selected }}</span>
+          </select> category
 
-        <button v-on:click="getJoke">Get Fact</button>
+            <button v-on:click="getJoke"> Get Fact </button>
+        </p>
+
+        <p>- or -</p>
+        <input v-model="searchQuery" placeholder="Search for a fact">
+        <button v-on:click="searchJoke"> Search </button>
 
         <p v-show="isFetchingAJoke">Fetching...</p>
         <h3 v-show="!isFetchingAJoke">{{currentJoke}}</h3>

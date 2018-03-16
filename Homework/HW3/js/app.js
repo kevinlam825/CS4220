@@ -9,6 +9,9 @@ let chuck = new Vue({
         previousJokes: [],
         categories: [],
         selected: 'any',
+        factUrl: '',
+        searchQuery: '',
+        searchUrl: '',
         isFetchingAJoke: false
     },
     created: function() {
@@ -19,7 +22,7 @@ let chuck = new Vue({
                 }
             })
             .then(function(response) {
-                self.categories = response.data // Assign categories array with the response array
+                self.categories = response.data // Assign categories array with the response values
             })
             .catch(function(err) {
                 alert(err)
@@ -28,19 +31,48 @@ let chuck = new Vue({
 
     // Methods that may be called on our vue object
     methods: {
-
         // Fetch a joke from icanhazdadjoke.com
+
+        searchJoke: function() {
+            this.isFetchingAJoke = true
+            let viewModel = this
+
+            viewModel.searchUrl = 'https://api.chucknorris.io/jokes/search?query=' + viewModel.searchQuery
+            console.log(viewModel.searchUrl)
+
+            axios.get(viewModel.searchUrl, {
+                    headers: {
+                        Accept: 'application/json'
+                    }
+                })
+                .then(function(response) {
+
+                    viewModel.isFetchingAJoke = false
+                    console.log(response)
+
+                    // Add the current joke to the previous jokes array
+                    if (viewModel.currentJoke)
+                        viewModel.previousJokes.push(viewModel.currentJoke)
+
+                    // Assign the new joke to the 'currentJoke' property
+                    viewModel.currentJoke = response.data.value
+                })
+                .catch(function(err) {
+                    alert(err)
+                })
+
+
+        },
+
         getJoke: function() {
 
             this.isFetchingAJoke = true
-                // We need to be able to reference our vue object (model) from 
-                // within the .get and .then functions below.  Since 'this' will
-                // change with each function call, we store a reference to the 
-                // current 'this' here
             let viewModel = this
 
+            if (viewModel.selected == 'any') viewModel.factUrl = 'https://api.chucknorris.io/jokes/random' // Assign url based on selected category
+            else viewModel.factUrl = 'https://api.chucknorris.io/jokes/random?category=' + viewModel.selected
 
-            axios.get('https://api.chucknorris.io/jokes/random', {
+            axios.get(viewModel.factUrl, {
                     headers: {
                         Accept: 'application/json'
                     }
