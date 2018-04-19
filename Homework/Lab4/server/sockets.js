@@ -16,12 +16,24 @@ module.exports = (server) => {
         socket.on('join-user', userName => {
             const user = {
                 id: socket.id,
-                name: userName
+                name: userName,
+                avatar: 'http://robohash.org/' + userName
             }
 
-            users.push(user)
+            let duplicateName = false;
 
-            io.emit('successful-join', user)
+            users.forEach(user => {
+                if (userName.toLowerCase() == (user.name).toLowerCase()) duplicateName = true
+            })
+
+            if (duplicateName == false) {
+                users.push(user)
+                io.emit('successful-join', user)
+            }
+
+            if (duplicateName == true) {
+                io.emit('failed-join', user)
+            }
         })
 
         socket.on('send-message', data => {

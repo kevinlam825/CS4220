@@ -1,10 +1,21 @@
+// Me Component
+const meComponent = {
+    template: ` <div class="me">
+                     <h4>Welcome</h4>
+                     <img v-bind:src=user.avatar class="circle" width="100px">
+                     <br>
+                     <h5>{{user.name}}</h5>                    
+                </div>`,
+    props: ['user']
+}
+
 // Chat Component
 const chatComponent = {
     template: ` <div class="chat-box">
                    <p v-for="data in content">
-                       <img src="https://robohash.org/userName?set=set3" class="circle" width="30px">
-                       <span><strong>{{data.user.name}}</strong> <small>{{data.date}}</small><span>
-                       <br />
+                        <img v-bind:src=data.user.avatar class="circle" width="30px">
+                        <span><strong>{{data.user.name}}</strong> <small>{{data.date}}</small><span>
+                        <br />
                        {{data.message}}
                    </p>
                </div>`,
@@ -17,7 +28,7 @@ const usersComponent = {
                    <h6>Active Users ({{users.length}})</h6>
                    <ul v-for="user in users">
                        <li>
-                            <img src="https://robohash.org/userName?set=set3" class="circle" width="30px">
+                            <img v-bind:src=user.avatar class="circle" width="30px">
                             <span>{{user.name}}</span>
                        </li>
                        <hr>
@@ -25,9 +36,6 @@ const usersComponent = {
                </div>`,
     props: ['users']
 }
-
-// Welcome Component
-
 
 const socket = io()
 const app = new Vue({
@@ -38,16 +46,17 @@ const app = new Vue({
         user: {},
         users: [],
         message: '',
-        messages: []
+        messages: [],
+        failedLogIn: ''
     },
     methods: {
-        joinUser: function () {
+        joinUser: function() {
             if (!this.userName)
                 return
 
             socket.emit('join-user', this.userName)
         },
-        sendMessage: function () {
+        sendMessage: function() {
             if (!this.message)
                 return
 
@@ -56,7 +65,8 @@ const app = new Vue({
     },
     components: {
         'users-component': usersComponent,
-        'chat-component': chatComponent
+        'chat-component': chatComponent,
+        'me-component': meComponent
     }
 })
 
@@ -74,9 +84,9 @@ socket.on('successful-join', user => {
     // so we need to ensure the loggedIn is set to true and user is set for matching user only
     if (user.name === app.userName) {
         app.user = user
+        app.failedLogIn = ''
         app.loggedIn = true
     }
-
     app.users.push(user)
 })
 
@@ -84,4 +94,9 @@ socket.on('successful-message', content => {
     // clear the message after success send
     app.message = ''
     app.messages.push(content)
+})
+
+socket.on('failed-join', user => {
+    // Display error message for duplicate username
+    app.failedLogIn = '*Sorry the username ' + user.name + ' already exists'
 })

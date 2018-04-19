@@ -1,4 +1,5 @@
 /* GENERAL STYLES */
+
 #chat-app {
     background: #efefef;
 }
@@ -7,7 +8,9 @@ hr {
     border-color: #3e3e6d;
 }
 
+
 /* LEFT COLUMN STYLES */
+
 .col.s3 {
     background: #2a2f43;
     border-top: 10px solid #278ca8;
@@ -37,6 +40,7 @@ hr {
 
 
 /* RIGHT COLUMN STYLES */
+
 .col.s9 input[type=text]:not(.browser-default) {
     color: #111111;
     font-family: 'Rajdhani', sans-serif;
@@ -51,19 +55,23 @@ hr {
     background: #2a2f43;
 }
 
+
 /* USER LIST STYLES */
 
 .user-login {
     position: absolute;
     bottom: 10px;
 }
-.user-list, .user-login {
+
+.user-list,
+.user-login {
     padding: 10px .75rem;
 }
 
 .user-list ul {
     margin: 0;
 }
+
 .user-list h6 {
     padding: 10px 0 10px 0;
 }
@@ -82,7 +90,9 @@ hr {
     color: #fb78ad;
 }
 
+
 /* CHAT BOX STYLES */
+
 .chat-box {
     background: #FFFFFF;
     border-radius: 4px;
@@ -113,6 +123,7 @@ hr {
     vertical-align: middle;
 }
 
+
 /* ME STYLES */
 
 .me {
@@ -132,4 +143,3 @@ hr {
 .me img {
     background: #FFFFFF;
 }
-
